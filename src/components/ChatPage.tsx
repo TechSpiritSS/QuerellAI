@@ -15,10 +15,18 @@ export default function ChatPage() {
     messagesElement.current.scrollTop = messagesElement.current.scrollHeight;
   }
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setMessages([...messages, { text: message, isSender: true }]);
-    setMessage("");
+  const handleSubmit = () => {
+    if (message.trim() !== "") {
+      setMessages([...messages, { text: message, isSender: true }]);
+      setMessage("");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
   };
 
   return (
@@ -50,28 +58,29 @@ export default function ChatPage() {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                className="h-6 w-6 text-gray-600"
+                className="h-8 w-8 text-gray-600"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-                ></path>
+                />
               </svg>
             </button>
           </span>
-          <input
-            type="text"
+          <textarea
+            rows={2}
             placeholder="Write your message!"
             className="w-full rounded-md bg-gray-200 py-3 pl-12 text-gray-600 placeholder-gray-600 focus:placeholder-gray-400 focus:outline-none"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
           <div className="absolute inset-y-0 right-0 hidden items-center sm:flex">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-lg bg-blue-500 px-4 py-3 text-white transition duration-500 ease-in-out hover:bg-blue-400 focus:outline-none"
+              className="inline-flex items-center justify-center rounded-lg bg-blue-500 px-6 py-6 text-white transition duration-500 ease-in-out hover:bg-blue-400 focus:outline-none"
               onClick={handleSubmit}
             >
               <span className="font-bold">Send</span>
@@ -81,7 +90,7 @@ export default function ChatPage() {
                 fill="currentColor"
                 className="ml-2 h-6 w-6 rotate-90 transform"
               >
-                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
               </svg>
             </button>
           </div>
