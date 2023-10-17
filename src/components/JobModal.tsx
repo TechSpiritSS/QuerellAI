@@ -1,34 +1,15 @@
 import toast from "react-hot-toast";
 import React, { useState } from "react";
+import { useJobStore } from "~/context/jobStore";
+import randomTailwindColor from "~/utils/randomTailwindColor";
+import getInitials from "~/utils/getInitials";
 
-interface JobModalProps {
-  jobs: {
-    bgColor: string;
-    initials: string;
-    name: string;
-    title: string;
-    description: string;
-    href: string;
-  }[];
+export default function JobModal() {
+  const { addJob } = useJobStore();
 
-  setJobs: React.Dispatch<
-    React.SetStateAction<
-      {
-        bgColor: string;
-        initials: string;
-        name: string;
-        title: string;
-        description: string;
-        href: string;
-      }[]
-    >
-  >;
-}
-
-export default function JobModal({ jobs, setJobs }: JobModalProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [name, setName] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
+  const [company, setName] = useState<string>("");
+  const [position, setposition] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
   const openModal = () => {
@@ -43,7 +24,7 @@ export default function JobModal({ jobs, setJobs }: JobModalProps) {
     e.preventDefault();
 
     setName("");
-    setTitle("");
+    setposition("");
     setDescription("");
     setShowModal(false);
 
@@ -60,30 +41,15 @@ export default function JobModal({ jobs, setJobs }: JobModalProps) {
       },
     );
 
-    const randomTailwindColor = () => {
-      const colors = [
-        "bg-pink-600",
-        "bg-purple-600",
-        "bg-yellow-500",
-        "bg-green-500",
-        "bg-blue-500",
-        "bg-indigo-500",
-      ];
-
-      return colors[Math.floor(Math.random() * colors.length)]!;
-    };
-
-    setJobs([
-      ...jobs,
-      {
-        name: name,
-        initials: "JD",
-        href: "#",
-        title: title,
-        description: description,
-        bgColor: randomTailwindColor(),
-      },
-    ]);
+    addJob({
+      jobID: company + "1",
+      company: company,
+      initials: getInitials(company),
+      href: "/resume",
+      position: position,
+      description: description,
+      bgColor: randomTailwindColor(),
+    });
   };
 
   return (
@@ -134,37 +100,37 @@ export default function JobModal({ jobs, setJobs }: JobModalProps) {
                   <form className="space-y-6" onSubmit={submitForm}>
                     <div>
                       <label
-                        htmlFor="name"
+                        htmlFor="company"
                         className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                       >
-                        Company Name
+                        Company company
                       </label>
                       <input
                         type="text"
-                        name="name"
-                        id="name"
+                        name="company"
+                        id="company"
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
                         placeholder="Rework AI"
-                        value={name}
+                        value={company}
                         onChange={(e) => setName(e.target.value)}
                         required
                       />
                     </div>
                     <div>
                       <label
-                        htmlFor="title"
+                        htmlFor="position"
                         className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                       >
-                        Job Title
+                        Job position
                       </label>
                       <input
                         type="text"
-                        name="title"
-                        id="title"
+                        name="position"
+                        id="position"
                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
                         placeholder="Full Stack Developer"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        value={position}
+                        onChange={(e) => setposition(e.target.value)}
                         required
                       />
                     </div>
@@ -174,7 +140,7 @@ export default function JobModal({ jobs, setJobs }: JobModalProps) {
                         htmlFor="description"
                         className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                       >
-                        Job Title
+                        Job position
                       </label>
                       <input
                         type="textbox"
